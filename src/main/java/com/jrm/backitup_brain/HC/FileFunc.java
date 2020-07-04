@@ -53,7 +53,7 @@ public class FileFunc {
 				o_Reader.read(o_EachImage);
 				o_Data = new JsonObject();
 				o_Data.addProperty("ImageName",o_ImageList[i_image].getName());
-				o_Data.addProperty("ImageData", String.valueOf(Base64.getEncoder().encode(o_EachImage)));
+				o_Data.addProperty("ImageData",Base64.getEncoder().encodeToString(o_EachImage));
 				ro_Data.add(o_Data);
 			}
 		}
