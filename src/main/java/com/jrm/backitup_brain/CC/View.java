@@ -32,8 +32,10 @@ public class View {
 			if(o_ReqArray.size() > 0){
 				if(v_uh_l.equals("0")){
 					ro_ResArray = o_FileFunc.f_ReadImages(v_uh_b);
+					v_ResMsg="Success";
 				}else if(v_uh_l.equals("1")){
 					ro_ResArray = o_FileFunc.f_WriteImages(v_uh_b,o_ReqArray);
+					v_ResMsg="Success";
 				}
 			}else{
 				v_ResMsg = "No Data";

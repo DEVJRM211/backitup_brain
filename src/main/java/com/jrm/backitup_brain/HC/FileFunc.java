@@ -17,11 +17,11 @@ public class FileFunc {
 		byte[] o_Each;
 		JsonObject o_Inner,o_Error;
 		JsonArray ro_ErrList = new JsonArray();
-		if(Files.notExists(Paths.get((v_Path+p_Mobile)))){
+		if(!Files.notExists(Paths.get((v_Path+p_Mobile)))){
 			for(int i_image=0;i_image<p_List.size();i_image++){
 				o_Inner = p_List.get(i_image).getAsJsonObject();
-				o_Each = Base64.getDecoder().decode(o_Inner.get("ImageData").getAsString());
-				try(OutputStream o_Stream = new FileOutputStream(v_Path+"/"+o_Inner.get("ImageName").getAsString())){
+				o_Each = Base64.getMimeDecoder().decode(o_Inner.get("ImageData").getAsString().getBytes());
+				try(OutputStream o_Stream = new FileOutputStream(v_Path+p_Mobile+"/"+o_Inner.get("ImageName").getAsString())){
 					o_Stream.write(o_Each);
 				}catch(Exception p_Exception){
 					o_Error = new JsonObject();
