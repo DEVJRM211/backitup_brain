@@ -29,7 +29,6 @@ public class View {
 		FileFunc o_FileFunc = new FileFunc();
 
 		try{
-			if(o_ReqArray.size() > 0){
 				if(v_uh_l.equals("0")){
 					ro_ResArray = o_FileFunc.f_ReadImages(v_uh_b);
 					v_ResMsg="Success";
@@ -37,9 +36,6 @@ public class View {
 					ro_ResArray = o_FileFunc.f_WriteImages(v_uh_b,o_ReqArray);
 					v_ResMsg="Success";
 				}
-			}else{
-				v_ResMsg = "No Data";
-			}
 			ro_ResData.addProperty("ResMsg",v_ResMsg);
 			ro_ResData.add("ResData",ro_ResArray);
 		}catch(Exception p_Exception){

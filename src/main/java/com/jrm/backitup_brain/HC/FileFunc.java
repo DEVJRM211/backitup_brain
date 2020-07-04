@@ -1,7 +1,9 @@
 package com.jrm.backitup_brain.HC;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.jrm.backitup_brain.MC.TAImage;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,8 +44,9 @@ public class FileFunc {
 
 	public JsonArray f_ReadImages(String p_Mobile) throws Exception{
 		FileInputStream o_Reader;
+		Gson o_Gson = new Gson();
 		byte[] o_EachImage;
-		JsonObject o_Data;
+		TAImage o_Data;
 		JsonArray ro_Data = new JsonArray();
 		File[] o_ImageList = new File(v_Path+p_Mobile).listFiles();
 		for(int i_image=0;i_image<o_ImageList.length;i_image++){
@@ -51,10 +54,10 @@ public class FileFunc {
 				o_Reader = new FileInputStream(o_ImageList[i_image]);
 				o_EachImage = new byte[(int) o_ImageList[i_image].length()];
 				o_Reader.read(o_EachImage);
-				o_Data = new JsonObject();
-				o_Data.addProperty("ImageName",o_ImageList[i_image].getName());
-				o_Data.addProperty("ImageData",Base64.getEncoder().encodeToString(o_EachImage));
-				ro_Data.add(o_Data);
+				o_Data = new TAImage();
+				o_Data.f_ImageName(o_ImageList[i_image].getName());
+				o_Data.f_ImageData(Base64.getEncoder().encodeToString(o_EachImage));
+				ro_Data.add(o_Gson.toJsonTree(o_Data));
 			}
 		}
 		return ro_Data;
