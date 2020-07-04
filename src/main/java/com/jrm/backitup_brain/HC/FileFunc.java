@@ -13,11 +13,11 @@ import java.util.Base64;
 
 public class FileFunc {
 	String v_Path = "/home/codeos/Documents/";
-	public JsonArray f_WriteImages(String p_UserName, JsonArray p_List) throws Exception{
+	public JsonArray f_WriteImages(String p_Mobile, JsonArray p_List) throws Exception{
 		byte[] o_Each;
 		JsonObject o_Inner,o_Error;
 		JsonArray ro_ErrList = new JsonArray();
-		if(Files.notExists(Paths.get((v_Path+p_UserName)))){
+		if(Files.notExists(Paths.get((v_Path+p_Mobile)))){
 			for(int i_image=0;i_image<p_List.size();i_image++){
 				o_Inner = p_List.get(i_image).getAsJsonObject();
 				o_Each = Base64.getDecoder().decode(o_Inner.get("ImageData").getAsString());
@@ -40,12 +40,12 @@ public class FileFunc {
 	return ro_ErrList;
 	}
 
-	public JsonArray f_ReadImages(String p_UserName) throws Exception{
+	public JsonArray f_ReadImages(String p_Mobile) throws Exception{
 		FileInputStream o_Reader;
 		byte[] o_EachImage;
 		JsonObject o_Data;
 		JsonArray ro_Data = new JsonArray();
-		File[] o_ImageList = new File(v_Path+p_UserName).listFiles();
+		File[] o_ImageList = new File(v_Path+p_Mobile).listFiles();
 		for(int i_image=0;i_image<o_ImageList.length;i_image++){
 			if(o_ImageList[i_image].isFile()){
 				o_Reader = new FileInputStream(o_ImageList[i_image]);
@@ -58,5 +58,9 @@ public class FileFunc {
 			}
 		}
 		return ro_Data;
+	}
+
+	public void f_CreateFolder(String p_Mobile) throws Exception{
+		new File(v_Path+p_Mobile).mkdir();
 	}
 }

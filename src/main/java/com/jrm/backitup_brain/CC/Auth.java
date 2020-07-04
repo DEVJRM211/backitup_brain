@@ -28,26 +28,38 @@ public class Auth {
 		return ro_Test.toString();
 	}
 
-	@PostMapping("/BI")
-	public String cf_BackUpImages(@RequestHeader Map<String,String> p_Headers,@RequestBody String p_Body){
+	@PostMapping("/user")
+	public String cf_User(@RequestHeader Map<String,String> p_Headers,@RequestBody String p_Body){
 		String v_Query = "",v_ResMsg = "Empty",
-				v_uh_d = p_Headers.get("uh_d"),
 				v_uh_l = p_Headers.get("uh_l");
 		JsonArray ro_ResArray = null, o_ReqArray = o_Gson.fromJson(p_Body,JsonObject.class).getAsJsonArray("values");
 		JsonObject ro_ResData = new JsonObject();
-		DbFunc o_DbFunc = new DbFunc();
-		int v_ReqLen = o_ReqArray.size();
+		DbFunc o_DbFunc = new  DbFunc();
+		FileFunc o_FileFunc = new FileFunc();
 		try{
-			if(o_ReqArray.size() > 0){
-				if(v_uh_l.equals("0")){
-					//code for get
-				}else if(v_uh_l.equals("1")){
-					//code for set
-				}else{
-					//return empty request data
+			if(o_ReqArray.size()>0){
+				JsonObject o_User = o_ReqArray.get(0).getAsJsonObject();
+				if(v_uh_l.equals("SI")){
+					v_Query = "select * from TAU where TAU_Mobile='"+o_User.get("TAU_Mobile").getAsString()+"' and TAU_Password='"+o_User.get("TAU_Password").getAsString()+"' ;";
+					ro_ResArray = o_DbFunc.f_CallDb('0',v_Query);
+					v_ResMsg = (ro_ResArray.size()>0)?"Success":"Invalid Mobile Number Or Password";
+				}else if(v_uh_l.equals("SU")){
+				 	v_Query = "select * from TAU where TAU_Mobile='"+o_User.get("TAU_Mobile").getAsString()+"';";
+				 	v_ResMsg = (o_DbFunc.f_CallDb('0',v_Query).size() > 0)?"User Exists":"New";
+				 	if(v_ResMsg.equals("New")){
+				 		v_Query = "insert into TAU values(0,"+
+								"'"+o_User.get("TAU_Name").getAsString()+"',"+
+								"'"+o_User.get("TAU_Mobile").getAsString()+"',"+
+								"'"+o_User.get("TAU_Email").getAsString()+"',"+
+								"'"+o_User.get("TAU_Password").getAsString()+"',"+
+								"'"+o_User.get("TAU_CreatedOn").getAsString()+"',"+
+								"'"+o_User.get("TAU_Status").getAsString()+"');";
+				 		ro_ResArray = o_DbFunc.f_CallDb('1',v_Query);
+				 		o_FileFunc.f_CreateFolder(o_User.get("TAU_Mobile").getAsString());
+					}
 				}
 			}else{
-				//retrun empty array data
+				v_ResMsg = "Wrong Request";
 			}
 			ro_ResData.addProperty("ResMsg",v_ResMsg);
 			ro_ResData.add("ResData",ro_ResArray);
@@ -58,4 +70,5 @@ public class Auth {
 		}
 		return ro_ResData.toString();
 	}
+
 }
