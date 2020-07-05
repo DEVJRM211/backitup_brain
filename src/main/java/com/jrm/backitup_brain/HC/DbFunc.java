@@ -10,7 +10,8 @@ public class DbFunc {
 	public JsonArray f_CallDb(char p_Type,String p_Query) throws Exception{
 		JsonArray ro_ResData = new JsonArray();
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection o_Connection = DriverManager.getConnection("jdbc:mysql://localhost/biu","root","harharmahadev");
+		//Connection o_Connection = DriverManager.getConnection("jdbc:mysql://localhost/biu","root","harharmahadev");
+		Connection o_Connection = DriverManager.getConnection("jdbc:mysql://localhost/biu","root","omkara@123");
 		Statement o_Statement = (Statement) o_Connection.createStatement();
 		if(p_Type=='1'){
 			ro_ResData.add(o_Statement.executeUpdate(p_Query));
